@@ -1,25 +1,11 @@
-import Core.Lexer;
-import Core.Operation;
-
-import java.util.List;
-
-import static Core.Lexer.BrainFuckToLex;
+import Core.Interpreter;
 
 public class Main {
 
     public static void main(String[] args) {
-        String q = "+++++++++++++++++++++++++++++++++++++++++++++\n" +
-                " +++++++++++++++++++++++++++.+++++++++++++++++\n" +
-                " ++++++++++++.+++++++..+++.-------------------\n" +
-                " ---------------------------------------------\n" +
-                " ---------------.+++++++++++++++++++++++++++++\n" +
-                " ++++++++++++++++++++++++++.++++++++++++++++++\n" +
-                " ++++++.+++.------.--------.------------------\n" +
-                " ---------------------------------------------\n" +
-                " ----.-----------------------.";
-        System.out.println("Starting main");
-        List<Operation> lex  = BrainFuckToLex(q);
-        Lexer.outer(lex);
+        System.out.println(Interpreter.run("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++\n" +
+                ".>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +
+                "------.--------.>+.>."));
     }
 }
 
