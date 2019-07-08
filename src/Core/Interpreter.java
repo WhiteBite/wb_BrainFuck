@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Core.Lexer.lexer;
-import static Core.Lexer.outer;
+import static Core.Lexer.*;
 
 public class Interpreter {
     private static final int STACK_LENGHT = 30000;
@@ -15,17 +14,20 @@ public class Interpreter {
     private static String strCommand = "";
 
     public static void main(String[] args) {
-        System.out.println(run(" ++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++\n" +
-                " .>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +
-                " ------.--------.>+.>."));
+        System.out.println(run("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++\n" +
+                ".>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +
+                "------.--------.>+.>."));
     }
     public static String run(String strCommand) {
         StringBuilder retString = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         char[] cmd_stack = strCommand.toCharArray();
-        List<Operation> arrayList  =lexer(strCommand);
+        List<Operation> arrayList  = BrainFuckToLex(strCommand);
         outer(arrayList); //  вывод лексем
+        System.out.println(LexToBrainFuck(arrayList));
         System.out.println(strCommand);
+
+
         int cmd_pointer = 0;     //command pointer
         int pointer = 0;        //memory pointer
         ArrayList<Integer> queueLoop = new ArrayList<Integer>();

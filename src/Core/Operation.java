@@ -1,7 +1,7 @@
 package Core;
 
 public class Operation {
-    public enum Type{
+    public enum Type {
         SHIFT,
         ADD,
         ZERO,
@@ -11,8 +11,10 @@ public class Operation {
         END_WHILE
     }
 
+
     public Type type = null; //тип операции
     public int arg = 1; //кол-во повторений
+    char symbol ='_';
 
     public Operation(Type type, int arg) {
         this.type = type;
@@ -23,7 +25,7 @@ public class Operation {
         this.type = type;
     }
 
-    public Operation clone(){
+    public Operation clone() {
         return new Operation(type, arg);
     }
 }

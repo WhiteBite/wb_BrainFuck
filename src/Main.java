@@ -3,7 +3,7 @@ import Core.Operation;
 
 import java.util.List;
 
-import static Core.Lexer.lexer;
+import static Core.Lexer.BrainFuckToLex;
 
 public class Main {
 
@@ -18,7 +18,7 @@ public class Main {
                 " ---------------------------------------------\n" +
                 " ----.-----------------------.";
         System.out.println("Starting main");
-        List<Operation> lex  =lexer(q);
+        List<Operation> lex  = BrainFuckToLex(q);
         Lexer.outer(lex);
     }
 }
