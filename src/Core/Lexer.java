@@ -58,9 +58,12 @@ public abstract class Lexer {
         return retValue;
     }
 
+    public static void printOperation(Operation x) {
+        System.out.println(x.type + " " + x.arg);
+    }
     public static void outer(List<Operation> retValue) {
         for (Operation x : retValue) {
-            System.out.println(x.type + " " + x.arg);
+           printOperation(x);
         }
     }
 
@@ -106,5 +109,4 @@ public abstract class Lexer {
         }
         return BFcode.toString();
     }
-
 }

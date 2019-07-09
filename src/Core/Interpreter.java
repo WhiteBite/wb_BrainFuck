@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Core.Lexer.*;
+import static Core.Lexer.printOperation;
 
 public class Interpreter {
-    private static final int STACK_LENGHT = 30000;
+    private static final int STACK_LENGHT = 15;
     private static short[] arr = new short[STACK_LENGHT];
     private static String strCommand = "";
 
@@ -18,63 +18,66 @@ public class Interpreter {
                 ".>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +
                 "------.--------.>+.>."));
     }
+
     public static String run(String strCommand) {
         StringBuilder retString = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        char[] cmd_stack = strCommand.toCharArray();
-        List<Operation> arrayList  = BrainFuckToLex(strCommand);
-        outer(arrayList); //  вывод лексем
-        System.out.println(LexToBrainFuck(arrayList));
-        System.out.println(strCommand);
+        List<Operation> Lexems = Optimizer.optimize(strCommand);
 
-
-        int cmd_pointer = 0;     //command pointer
         int pointer = 0;        //memory pointer
-        ArrayList<Integer> queueLoop = new ArrayList<Integer>();
+        List<Integer> queueLoop = new ArrayList<Integer>();
 
-        while (cmd_pointer < cmd_stack.length) {
-            switch (cmd_stack[cmd_pointer]) {
-                case '+':
-                    if ((arr[pointer]+1) > 255) arr[pointer] = 0;
-                    else arr[pointer]++;
-                    cmd_pointer++;
+        char[] cmd_stack = strCommand.toCharArray();
+        for (int i = 0; i < Lexems.size(); i++) {
+            System.out.print("NOW: ");
+            Operation command = Lexems.get(i);
+            printOperation(command);
+
+            switch (command.type) {
+                case ADD: {
+                    if (command.arg > 0) {
+                        if ((arr[pointer] + 1) > 255)
+                            arr[pointer] = 0;
+                        else
+                            arr[pointer] += command.arg;
+                    } else if ((arr[pointer] - 1) < 0)
+                        arr[pointer] = 255;
+                    else
+                        arr[pointer] += command.arg;
                     break;
-                case '-':
-                    if ((arr[pointer]-1) < 0) arr[pointer] = 255;
-                    else arr[pointer]--;
-                    cmd_pointer++;
+                }
+                case SHIFT: {
+                    pointer += command.arg;
                     break;
-                case '>':
-                    pointer++;
-                    cmd_pointer++;
-                    break;
-                case '<':
-                    pointer--;
-                    cmd_pointer++;
-                    break;
-                case '.':
-                    retString.append((char) arr[pointer]);
-                    cmd_pointer++;
-                    break;
-                case ',':
+                }
+                case IN: {
                     try {
                         arr[pointer] = (short) Integer.parseInt(reader.readLine());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    cmd_pointer++;
                     break;
-                case '[':
-                    queueLoop.add(cmd_pointer);
-                    cmd_pointer++;
+                }
+                case OUT: {
+                    retString.append((char) arr[pointer]);
                     break;
-                case ']':
-                    if ((arr[pointer]) > 0)
-                        cmd_pointer = queueLoop.remove(queueLoop.size()-1);
-                    else cmd_pointer++;
+                }
+                case ZERO: {
+                    arr[pointer] = 0;
                     break;
+                }
+                case BEGIN_WHILE: {
+                    queueLoop.add(i);
+                    break;
+                }
+                case END_WHILE: {
+                    if ( arr[pointer] > 0) {
+                        i = queueLoop.remove(queueLoop.size() - 1);
+                        i--; // из-за прибавления при итерации цикла нужно вычесть
+                    }
+                    break;
+                }
                 default:
-                    cmd_pointer++;
                     break;
 
             }

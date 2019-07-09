@@ -11,10 +11,8 @@ public class Operation {
         END_WHILE
     }
 
-
     public Type type = null; //тип операции
     public int arg = 1; //кол-во повторений
-    char symbol ='_';
 
     public Operation(Type type, int arg) {
         this.type = type;
