@@ -9,7 +9,7 @@ import java.util.List;
 import static Core.Lexer.printOperation;
 
 public class Interpreter {
-    private static final int STACK_LENGHT = 15;
+    private static final int STACK_LENGHT = 10000;
     private static short[] arr = new short[STACK_LENGHT];
     private static String strCommand = "";
 
