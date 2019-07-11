@@ -1,10 +1,10 @@
-package Core;
+package ru.whitebite.Core;
 
 import java.util.List;
 import java.util.Stack;
 
-import static Core.Lexer.brainFuckToLex;
-import static Core.Lexer.outer;
+import static ru.whitebite.Core.Lexer.brainFuckToLex;
+import static ru.whitebite.Core.Lexer.outer;
 
 public abstract class Optimizer {
     public static List<Operation> optimize(String code) {

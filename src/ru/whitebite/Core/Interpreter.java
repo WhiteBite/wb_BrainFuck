@@ -1,4 +1,4 @@
-package Core;
+package ru.whitebite.Core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Core.Lexer.printOperation;
+import static ru.whitebite.Core.Lexer.printOperation;
 
 public class Interpreter {
 

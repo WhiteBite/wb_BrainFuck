@@ -1,4 +1,4 @@
-package Core;
+package ru.whitebite.Core;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,6 @@
-import Core.Interpreter;
+package ru.whitebite;
+
+import ru.whitebite.Core.Interpreter;
 
 public class Main {
 

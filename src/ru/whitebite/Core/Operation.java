@@ -1,4 +1,4 @@
-package Core;
+package ru.whitebite.Core;
 
 public class Operation {
 
