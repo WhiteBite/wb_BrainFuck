@@ -3,12 +3,12 @@ package Core;
 import java.util.List;
 import java.util.Stack;
 
-import static Core.Lexer.BrainFuckToLex;
+import static Core.Lexer.brainFuckToLex;
 import static Core.Lexer.outer;
 
 public abstract class Optimizer {
     public static List<Operation> optimize(String code) {
-        return optimize(BrainFuckToLex(code));
+        return optimize(brainFuckToLex(code));
     }
 
     public static List<Operation> optimize(List<Operation> tokens) {
