@@ -1,5 +1,10 @@
 package ru.whitebite.Core;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Operation {
 
   public enum Type {
@@ -12,19 +17,23 @@ public class Operation {
     END_WHILE
   }
 
-  public Type type = null; //тип операции
-  public int arg = 1; //кол-во повторений
+  private Type type = null; //тип операции
+  private int arg = 1; //кол-во повторений
+  private int position = 0; //кол-во повторений
 
-  public Operation(Type type, int arg) {
+  public Operation(Type type, int arg,int position) {
     this.type = type;
     this.arg = arg;
+    this.position = position;
   }
-
+  public void incArg(int value){
+    arg+=value;
+  }
   public Operation(Type type) {
     this.type = type;
   }
 
   public Operation clone() {
-    return new Operation(type, arg);
+    return new Operation(type, arg,position);
   }
 }

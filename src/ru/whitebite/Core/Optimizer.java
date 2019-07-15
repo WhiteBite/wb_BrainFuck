@@ -12,11 +12,11 @@ public abstract class Optimizer {
     }
 
     public static List<Operation> optimize(List<Operation> tokens) {
-        Stack<Operation> LexStack = new Stack<Operation>();
+        Stack<Operation> LexStack = new Stack<>();
 
         //Приходимся по всем командам
         for (Operation token : tokens) {
-            switch (token.type){
+            switch (token.getType()){
                 case SHIFT:
                 case ADD:
                 case OUT:
@@ -29,12 +29,12 @@ public abstract class Optimizer {
                     }
 
                     //Если последняя команда не совпадает с текущей, значит мы закончили сжатие
-                    if(LexStack.peek().type != token.type) {
-                        if(LexStack.peek().arg == 0) //если в результате сжатия команда "исчезла"
+                    if(LexStack.peek().getType() != token.getType()) {
+                        if(LexStack.peek().getArg() == 0) //если в результате сжатия команда "исчезла"
                             LexStack.pop(); //то просто убираем ее
 
-                        if(LexStack.peek().type == Operation.Type.ZERO) //если это команда ZERO
-                            LexStack.peek().arg = 1; //то убираем возможные повторы, ибо они не имеют смысла
+                        if(LexStack.peek().getType() == Operation.Type.ZERO) //если это команда ZERO
+                            LexStack.peek().setArg(1) ; //то убираем возможные повторы, ибо они не имеют смысла
 
                         LexStack.push(token.clone()); //добавляем текущую команду
                         continue;
@@ -42,7 +42,7 @@ public abstract class Optimizer {
 
                     //сюда мы попадет при условии, если команда дальше повторяется
                     //мы просто дополняем текущую команду вместо добавления новой
-                    LexStack.peek().arg += token.arg;
+                    LexStack.peek().incArg(token.getArg());
                     break;
 
                 case BEGIN_WHILE:
@@ -52,7 +52,7 @@ public abstract class Optimizer {
                     break;
             }
         }
-        outer(LexStack);
+        //outer(LexStack);
         return LexStack;
     }
 }

@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.whitebite.WBLord'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    //testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+
+
+
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.25'
+    //compile "org.slf4j:slf4j-simple:1.6.1"
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+
+//    compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
+//    compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
+
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}

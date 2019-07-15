@@ -1,7 +1,13 @@
 package ru.whitebite.Core;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 // 0) Maven or Gradle
@@ -12,37 +18,37 @@ import java.util.logging.Logger;
 
 // Optional:
 // 1) DI -> Spring
-
-
-
+@Slf4j
 public abstract class Lexer {
-
-    private static Logger Lexical_analysis = Logger.getLogger(Lexer.class.getName());
 
 
     public static List<Operation> brainFuckToLex(String code) {
+
         //Создаем массив лексем (которые уже являются опкодами и готовы к исполнению)
         List<Operation> retValue = new ArrayList<>();
         int pos = 0;
+        EnumMap<Operation.Type, Consumer<String>> activityMap = new EnumMap<>(Operation.Type.class);
+        //activityMap.put(Operation.Type.ADD,() -> {log.info		})
+
+        try {
 
         //Приходимся по всем символам
         while (pos < code.length()) {
             switch (code.charAt(pos++)) {
                 //Как и говорилось ранее, некоторые команды эквивалентны
                 case '>':
-                    retValue.add(new Operation(Operation.Type.SHIFT, +1));
+                    retValue.add(new Operation(Operation.Type.SHIFT, +1, pos));
                     break;
                 case '<':
-                    retValue.add(new Operation(Operation.Type.SHIFT, -1));
+                    retValue.add(new Operation(Operation.Type.SHIFT, -1, pos));
                     break;
 
                 case '+':
-                    retValue.add(new Operation(Operation.Type.ADD, +1));
+                    retValue.add(new Operation(Operation.Type.ADD, +1, pos));
                     break;
                 case '-':
-                    retValue.add(new Operation(Operation.Type.ADD, -1));
+                    retValue.add(new Operation(Operation.Type.ADD, -1, pos));
                     break;
-
                 case '.':
                     retValue.add(new Operation(Operation.Type.OUT));
                     break;
@@ -59,65 +65,74 @@ public abstract class Lexer {
                     } else
                         retValue.add(new Operation(Operation.Type.BEGIN_WHILE));
                     break;
-                case ']':
+                case ']': {
                     retValue.add(new Operation(Operation.Type.END_WHILE));
                     break;
+                }
+                default:
+                    throw new NullPointerException("Invalid symbols");
+
             }
         }
-        //Lexical_analysis.info("Logger Name: "+Lexical_analysis.getName());
-        Lexical_analysis.info("|The end of the analysis|");
+        }catch( Exception e){
+            log.error(e.getMessage());
+            System.exit(1);
+        }
+
+        log.info("|The end of the analysis|");
         return retValue;
     }
 
     public static void printOperation(Operation x) {
-        System.out.println(x.type + " " + x.arg);
+        log.info(x.getPosition() + " " + x.getType() + ":" + x.getArg());
     }
+
     public static void outer(List<Operation> retValue) {
         for (Operation x : retValue) {
-           printOperation(x);
+            printOperation(x);
         }
     }
 
-    public static String LexToBrainFuck(List<Operation> retValue) {
-        StringBuilder BFcode = new StringBuilder();
+    public static String lexToBrainFuck(List<Operation> retValue) {
+        StringBuilder bfCode = new StringBuilder();
         for (Operation x : retValue) {
-            switch (x.type) {
+            switch (x.getType()) {
                 case SHIFT: {
-                    if (x.arg > 0)
-                        BFcode.append('>');
+                    if (x.getArg() > 0)
+                        bfCode.append('>');
                     else
-                        BFcode.append('<');
+                        bfCode.append('<');
                     break;
                 }
                 case ADD: {
-                    if (x.arg > 0)
-                        BFcode.append('+');
+                    if (x.getArg() > 0)
+                        bfCode.append('+');
                     else
-                        BFcode.append('-');
+                        bfCode.append('-');
                     break;
                 }
                 case IN: {
-                    BFcode.append(',');
+                    bfCode.append(',');
                     break;
                 }
                 case OUT: {
-                    BFcode.append('.');
+                    bfCode.append('.');
                     break;
                 }
                 case ZERO: {
-                    BFcode.append("[-]");
+                    bfCode.append("[-]");
                     break;
                 }
                 case BEGIN_WHILE: {
-                    BFcode.append('[');
+                    bfCode.append('[');
                     break;
                 }
                 case END_WHILE: {
-                    BFcode.append(']');
+                    bfCode.append(']');
                     break;
                 }
             }
         }
-        return BFcode.toString();
+        return bfCode.toString();
     }
 }
