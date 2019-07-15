@@ -4,12 +4,10 @@ import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
-
+import java.util.function.Supplier;
 // 0) Maven or Gradle
 // 1) CodeStyle (Google)
 // 2) Lombok (Annotations -> getters/setters etc.)
@@ -27,58 +25,90 @@ public abstract class Lexer {
         //Создаем массив лексем (которые уже являются опкодами и готовы к исполнению)
         List<Operation> retValue = new ArrayList<>();
         int pos = 0;
-        EnumMap<Operation.Type, Consumer<String>> activityMap = new EnumMap<>(Operation.Type.class);
-        //activityMap.put(Operation.Type.ADD,() -> {log.info		})
+//        commands.put("get", () -> "some value");
+
+
+        List<Operation> retValue2 = new ArrayList<>();
+
+        Map<Character, > activityMap = new HashMap<>();
+
+        activityMap.put('+', (state) -> {
+            retValue2.add(new Operation(Operation.Type.ADD, +1));
+        });
+        activityMap.put('-', (state) -> {
+            retValue2.add(new Operation(Operation.Type.ADD, -1));
+        });
+        activityMap.put('>', (state) -> {
+            retValue2.add(new Operation(Operation.Type.SHIFT, +1));
+        });
+        activityMap.put('<', (state) -> {
+            retValue2.add(new Operation(Operation.Type.SHIFT, -1));
+        });
+        activityMap.put('.', (state) -> {
+            retValue2.add(new Operation(Operation.Type.OUT));
+        });
+
 
         try {
+            //Приходимся по всем символам
+            while (pos < code.length()) {
+                char c = code.charAt(pos);
 
-        //Приходимся по всем символам
-        while (pos < code.length()) {
-            switch (code.charAt(pos++)) {
-                //Как и говорилось ранее, некоторые команды эквивалентны
-                case '>':
-                    retValue.add(new Operation(Operation.Type.SHIFT, +1, pos));
-                    break;
-                case '<':
-                    retValue.add(new Operation(Operation.Type.SHIFT, -1, pos));
-                    break;
+                // Callable<String> q = activityMap.get(String.valueOf(c));
 
-                case '+':
-                    retValue.add(new Operation(Operation.Type.ADD, +1, pos));
-                    break;
-                case '-':
-                    retValue.add(new Operation(Operation.Type.ADD, -1, pos));
-                    break;
-                case '.':
-                    retValue.add(new Operation(Operation.Type.OUT));
-                    break;
-                case ',':
-                    retValue.add(new Operation(Operation.Type.IN));
-                    break;
-                case '[':
-                    char next = code.charAt(pos);
+                activityMap.getOrDefault(c, (state) -> {}).    accept(pos);
+              //  activityMap.get(c);
 
-                    //проверяем, является ли это обнулением ячейки ([+] или [-])
-                    if ((next == '+' || next == '-') && code.charAt(pos + 1) == ']') {
-                        retValue.add(new Operation(Operation.Type.ZERO));
-                        pos += 2;
-                    } else
-                        retValue.add(new Operation(Operation.Type.BEGIN_WHILE));
-                    break;
-                case ']': {
-                    retValue.add(new Operation(Operation.Type.END_WHILE));
-                    break;
+
+                switch (c) {
+                    //Как и говорилось ранее, некоторые команды эквивалентны
+                    case '>':
+                        retValue.add(new Operation(Operation.Type.SHIFT, +1, pos));
+                        break;
+                    case '<':
+                        retValue.add(new Operation(Operation.Type.SHIFT, -1, pos));
+                        break;
+
+                    case '+':
+
+                        retValue.add(new Operation(Operation.Type.ADD, +1, pos));
+                        break;
+                    case '-':
+                        retValue.add(new Operation(Operation.Type.ADD, -1, pos));
+                        break;
+                    case '.':
+                        retValue.add(new Operation(Operation.Type.OUT));
+                        break;
+                    case ',':
+                        retValue.add(new Operation(Operation.Type.IN));
+                        break;
+                    case '[':
+                        char next = code.charAt(pos);
+
+                        //проверяем, является ли это обнулением ячейки ([+] или [-])
+                        if ((next == '+' || next == '-') && code.charAt(pos + 1) == ']') {
+                            retValue.add(new Operation(Operation.Type.ZERO));
+                            pos += 2;
+                        } else
+                            retValue.add(new Operation(Operation.Type.BEGIN_WHILE));
+                        break;
+                    case ']': {
+                        retValue.add(new Operation(Operation.Type.END_WHILE));
+                        break;
+                    }
+                    case ' ': //случай с пустым символом
+                        break;
+                    default:
+                        throw new NullPointerException("Invalid symbols");
+
                 }
-                default:
-                    throw new NullPointerException("Invalid symbols");
-
+                pos++;
             }
-        }
-        }catch( Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
             System.exit(1);
         }
-
+        System.out.println(activityMap);
         log.info("|The end of the analysis|");
         return retValue;
     }

@@ -21,13 +21,13 @@ public class Interpreter {
         StringBuilder retString = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        List<Operation> Lexems = optimize(strCommand);
+        List<Operation> lexems = optimize(strCommand);
 
         int pointer = 0;        //memory pointer
         List<Integer> queueLoop = new ArrayList<>();
 
-        for (int i = 0; i < Lexems.size(); i++) {
-            Operation command = Lexems.get(i);
+        for (int i = 0; i < lexems.size(); i++) {
+            Operation command = lexems.get(i);
             printOperation(command);
             try {
 
