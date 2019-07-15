@@ -1,13 +1,12 @@
 package ru.whitebite.Core;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 // 0) Maven or Gradle
 // 1) CodeStyle (Google)
 // 2) Lombok (Annotations -> getters/setters etc.)
@@ -60,8 +59,8 @@ public abstract class Lexer {
             printOperation(x);
         }
     }
-
-    public static String lexToBrainFuck(List<Operation> retValue) {
+    //TODO Здесь декомпилер
+    /*public static String lexToBrainFuck(List<Operation> retValue) {
         StringBuilder bfCode = new StringBuilder();
         for (Operation x : retValue) {
             switch (x.getType()) {
@@ -102,5 +101,5 @@ public abstract class Lexer {
             }
         }
         return bfCode.toString();
-    }
+    }*/
 }
