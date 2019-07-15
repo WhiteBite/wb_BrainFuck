@@ -6,6 +6,7 @@ import ru.whitebite.Core.Interpreter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 @Slf4j
 public class ArgHandler {
     public static String starter(String[] args) {
@@ -25,27 +26,25 @@ public class ArgHandler {
 
         else if (args.length == 2) {
             switch (args[0]) {
-                case "-f": {
+                case "-c":
+                    return args[1];
+
+                case "-f":
                     String fileName = args[1];
                     try {
                         String content = Files.lines(Paths.get(fileName)).reduce("", String::concat);
                         log.info(content);
-                        log.info(Interpreter.run(content));
+                        return content;
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
-                        System.err.println("Ошибка считывания файла");
-                        e.printStackTrace();
+                        log.error("Ошибка считывания файла");
+                        log.error("Ops! ", e);
                     }
                     break;
-                }
-                case "-c": {
-                    log.info(Interpreter.run(args[1]));
-                }
                 default:
                     return "Unknown argument!";
             }
         }
-
         return "error";
     }
 }

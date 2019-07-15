@@ -8,10 +8,10 @@ import ru.whitebite.ArgHandler.ArgHandler;
 public class Main {
     public static void main(String[] args) {
         String code = ArgHandler.starter(args);
-        if (code != "error")
-            log.info(Interpreter.run(code));
-        else
+        if (code.equals("error"))
             log.error("Invalid argument");
+        else
+            log.info(Interpreter.run(code));
 
 //		log.info(Interpreter.run("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++\n" +
 //				".>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +

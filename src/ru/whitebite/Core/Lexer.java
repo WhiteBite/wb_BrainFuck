@@ -22,94 +22,32 @@ public abstract class Lexer {
 
     public static List<Operation> brainFuckToLex(String code) {
 
-        //Создаем массив лексем (которые уже являются опкодами и готовы к исполнению)
+
         List<Operation> retValue = new ArrayList<>();
+        Map<Character, Operation> activityMap = new HashMap<>();
+
+        activityMap.put('+', new Operation(Operation.Type.ADD, 1));
+        activityMap.put('-', new Operation(Operation.Type.ADD, -1));
+        activityMap.put('<', new Operation(Operation.Type.SHIFT, -1));
+        activityMap.put('>', new Operation(Operation.Type.SHIFT, 1));
+        activityMap.put('.', new Operation(Operation.Type.OUT));
+        activityMap.put(',', new Operation(Operation.Type.IN));
+        activityMap.put('[', new Operation(Operation.Type.BEGIN_WHILE));
+        activityMap.put(']', new Operation(Operation.Type.END_WHILE));
+
         int pos = 0;
-//        commands.put("get", () -> "some value");
-
-
-        List<Operation> retValue2 = new ArrayList<>();
-
-        Map<Character, > activityMap = new HashMap<>();
-
-        activityMap.put('+', (state) -> {
-            retValue2.add(new Operation(Operation.Type.ADD, +1));
-        });
-        activityMap.put('-', (state) -> {
-            retValue2.add(new Operation(Operation.Type.ADD, -1));
-        });
-        activityMap.put('>', (state) -> {
-            retValue2.add(new Operation(Operation.Type.SHIFT, +1));
-        });
-        activityMap.put('<', (state) -> {
-            retValue2.add(new Operation(Operation.Type.SHIFT, -1));
-        });
-        activityMap.put('.', (state) -> {
-            retValue2.add(new Operation(Operation.Type.OUT));
-        });
-
-
         try {
             //Приходимся по всем символам
             while (pos < code.length()) {
                 char c = code.charAt(pos);
-
-                // Callable<String> q = activityMap.get(String.valueOf(c));
-
-                activityMap.getOrDefault(c, (state) -> {}).    accept(pos);
-              //  activityMap.get(c);
-
-
-                switch (c) {
-                    //Как и говорилось ранее, некоторые команды эквивалентны
-                    case '>':
-                        retValue.add(new Operation(Operation.Type.SHIFT, +1, pos));
-                        break;
-                    case '<':
-                        retValue.add(new Operation(Operation.Type.SHIFT, -1, pos));
-                        break;
-
-                    case '+':
-
-                        retValue.add(new Operation(Operation.Type.ADD, +1, pos));
-                        break;
-                    case '-':
-                        retValue.add(new Operation(Operation.Type.ADD, -1, pos));
-                        break;
-                    case '.':
-                        retValue.add(new Operation(Operation.Type.OUT));
-                        break;
-                    case ',':
-                        retValue.add(new Operation(Operation.Type.IN));
-                        break;
-                    case '[':
-                        char next = code.charAt(pos);
-
-                        //проверяем, является ли это обнулением ячейки ([+] или [-])
-                        if ((next == '+' || next == '-') && code.charAt(pos + 1) == ']') {
-                            retValue.add(new Operation(Operation.Type.ZERO));
-                            pos += 2;
-                        } else
-                            retValue.add(new Operation(Operation.Type.BEGIN_WHILE));
-                        break;
-                    case ']': {
-                        retValue.add(new Operation(Operation.Type.END_WHILE));
-                        break;
-                    }
-                    case ' ': //случай с пустым символом
-                        break;
-                    default:
-                        throw new NullPointerException("Invalid symbols");
-
-                }
+                if (activityMap.containsKey(c))
+                    retValue.add(activityMap.get(c));
                 pos++;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
             System.exit(1);
         }
-        System.out.println(activityMap);
-        log.info("|The end of the analysis|");
         return retValue;
     }
 
