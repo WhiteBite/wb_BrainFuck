@@ -20,8 +20,6 @@ public abstract class Lexer {
 
 
     public static List<Operation> brainFuckToLex(String code) {
-
-
         List<Operation> retValue = new ArrayList<>();
         Map<Character, Operation> activityMap = new HashMap<>();
 
