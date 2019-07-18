@@ -12,10 +12,6 @@ public class Main {
             log.error("Invalid argument");
         else
             log.info(Interpreter.run(code));
-
-//		log.info(Interpreter.run("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++\n" +
-//				".>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.\n" +
-//				"------.--------.>+.>."));
     }
 
 }
