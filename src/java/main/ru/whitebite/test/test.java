@@ -1,4 +1,4 @@
-package ru.whitebite.testASM;
+package test;
 
 import java.io.IOException;
 

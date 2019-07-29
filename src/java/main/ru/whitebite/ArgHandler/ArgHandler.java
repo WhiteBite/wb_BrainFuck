@@ -1,7 +1,6 @@
 package ru.whitebite.ArgHandler;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.whitebite.Core.Interpreter;
 
 import java.io.IOException;
 import java.nio.file.Files;

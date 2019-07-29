@@ -1,8 +1,8 @@
 package ru.whitebite;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.whitebite.Core.Interpreter;
 import ru.whitebite.ArgHandler.ArgHandler;
+import ru.whitebite.Core.Interpreter;
 
 @Slf4j
 public class Main {

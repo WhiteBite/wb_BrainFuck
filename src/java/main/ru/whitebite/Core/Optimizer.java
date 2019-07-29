@@ -1,14 +1,15 @@
 package ru.whitebite.Core;
 
+
+
 import java.util.List;
 import java.util.Stack;
 
-import static ru.whitebite.Core.Lexer.brainFuckToLex;
-import static ru.whitebite.Core.Lexer.outer;
 
 public abstract class Optimizer {
     public static List<Operation> optimize(String code) {
-        return optimize(brainFuckToLex(code));
+        List<Operation> optimize = optimize(Lexer.brainFuckToLex(code));
+        return optimize;
     }
 
     public static List<Operation> optimize(List<Operation> tokens) {

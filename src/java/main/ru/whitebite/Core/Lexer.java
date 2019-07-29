@@ -31,7 +31,6 @@ public abstract class Lexer {
         activityMap.put(',', new Operation(Operation.Type.IN));
         activityMap.put('[', new Operation(Operation.Type.BEGIN_WHILE));
         activityMap.put(']', new Operation(Operation.Type.END_WHILE));
-
         int pos = 0;
         try {
             //Приходимся по всем символам
